@@ -1,7 +1,14 @@
-from markdown_strings import esc_format
-
 import re
 import unicodedata
+
+
+def esc_format(text):
+    """Escape underscores and asterisks so Telegram Markdown shows them literally.
+
+    Same as esc_format from the markdown-strings package, which was removed from PyPI.
+    """
+    return str(text).replace("_", r"\_").replace("*", r"\*")
+
 
 def try_parse_int(x, default=None):
     try:

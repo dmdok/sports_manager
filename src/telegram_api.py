@@ -57,7 +57,8 @@ class TelegramApi:
         params = {"timeout": timeout}
         if offset is not None:
             params["offset"] = offset
-        # The HTTP timeout must outlast Telegram's long-poll timeout.
-        response = self.__request("GET", "getUpdates", timeout=timeout + 10, params=params)
+        # Fail fast on a dropped connection attempt, but let the read
+        # outlast Telegram's long-poll timeout.
+        response = self.__request("GET", "getUpdates", timeout=(5, timeout + 10), params=params)
         response.raise_for_status()
         return response.json()["result"]
